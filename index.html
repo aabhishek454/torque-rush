@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>Torque Rush — Physics Hill Climb</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="gameCanvas"></canvas>
+    <div id="mainMenu" class="screen active">
+      <div class="menu-bg"></div>
+      <div class="menu-content">
+        <div class="logo">
+          <div class="logo-icon">⚙️</div>
+          <h1>TORQUE<span>RUSH</span></h1>
+          <p>Physics Hill Climb</p>
+        </div>
+        <div class="menu-stats">
+          <div class="stat"><span id="menuCoins">0</span><small>Coins</small></div>
+          <div class="stat"><span id="menuXP">0</span><small>XP</small></div>
+          <div class="stat"><span id="menuLevel">1</span><small>Level</small></div>
+        </div>
+        <div class="menu-buttons">
+          <button class="btn primary" id="btnPlay">PLAY</button>
+          <button class="btn" id="btnGarage">GARAGE</button>
+          <button class="btn" id="btnMaps">MAPS</button>
+          <button class="btn secondary" id="btnSettings">SETTINGS</button>
+        </div>
+      </div>
+    </div>
+    <div id="garageScreen" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" id="garageBack">←</button>
+        <h2>GARAGE</h2>
+        <div class="coins-display"><span id="garageCoins">0</span> 🪙</div>
+      </div>
+      <div class="garage-body">
+        <div class="vehicle-preview" id="vehiclePreview">
+          <div class="preview-car" id="previewCar"></div>
+          <div class="vehicle-name" id="vehicleName">Starter Buggy</div>
+        </div>
+        <div class="vehicle-list" id="vehicleList"></div>
+        <div class="upgrade-panel" id="upgradePanel">
+          <h3>Upgrades</h3>
+          <div class="upgrades" id="upgradesList"></div>
+        </div>
+      </div>
+    </div>
+    <div id="mapsScreen" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" id="mapsBack">←</button>
+        <h2>SELECT MAP</h2>
+      </div>
+      <div class="maps-grid" id="mapsGrid"></div>
+    </div>
+    <div id="stageScreen" class="screen">
+      <div class="screen-header">
+        <button class="btn-back" id="stageBack">←</button>
+        <h2 id="stageMapName">Green Hills</h2>
+      </div>
+      <div class="stages-list" id="stagesList"></div>
+    </div>
+    <div id="hud" class="hidden">
+      <div class="hud-top">
+        <button id="btnPause" class="hud-btn">❚❚</button>
+        <div class="distance-box"><span id="hudDist">0</span><small>m</small></div>
+        <div class="coins-box"><span id="hudCoins">0</span> 🪙</div>
+      </div>
+      <div class="hud-bottom">
+        <div class="fuel-bar"><div class="fuel-fill" id="fuelFill"></div><span>FUEL</span></div>
+        <div class="speedo">
+          <div class="speed-value" id="speedValue">0</div>
+          <div class="speed-unit">km/h</div>
+          <div class="gear" id="gearDisplay">1</div>
+        </div>
+        <div class="nitro-bar"><div class="nitro-fill" id="nitroFill"></div><span>NITRO</span></div>
+      </div>
+      <div id="trickPopup" class="trick-popup hidden"></div>
+    </div>
+    <div id="controls" class="hidden">
+      <div class="ctrl-left"><button id="btnBrake" class="ctrl-btn brake">◀</button></div>
+      <div class="ctrl-right">
+        <button id="btnGas" class="ctrl-btn gas">▶</button>
+        <button id="btnTiltLeft" class="ctrl-btn tilt">↺</button>
+        <button id="btnTiltRight" class="ctrl-btn tilt">↻</button>
+      </div>
+    </div>
+    <div id="pauseMenu" class="screen overlay hidden">
+      <div class="pause-box">
+        <h2>PAUSED</h2>
+        <button class="btn primary" id="btnResume">RESUME</button>
+        <button class="btn" id="btnRestart">RESTART</button>
+        <button class="btn secondary" id="btnQuit">QUIT TO MENU</button>
+      </div>
+    </div>
+    <div id="resultsScreen" class="screen overlay hidden">
+      <div class="results-box">
+        <h2 id="resultsTitle">STAGE COMPLETE</h2>
+        <div class="results-stats">
+          <div class="r-stat"><span id="resDist">0</span><small>Distance</small></div>
+          <div class="r-stat"><span id="resCoins">0</span><small>Coins</small></div>
+          <div class="r-stat"><span id="resXP">0</span><small>XP</small></div>
+          <div class="r-stat"><span id="resScore">0</span><small>Score</small></div>
+        </div>
+        <div class="results-tricks" id="resTricks"></div>
+        <div class="results-btns">
+          <button class="btn primary" id="btnNextStage">NEXT STAGE</button>
+          <button class="btn" id="btnRetry">RETRY</button>
+          <button class="btn secondary" id="btnHome">HOME</button>
+        </div>
+      </div>
+    </div>
+    <div id="loading" class="screen active">
+      <div class="loader"><div class="spinner"></div><p>Loading Torque Rush...</p></div>
+    </div>
+  </div>
+  <script src="js/matter.min.js"></script>
+  <script src="js/save.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/terrain.js"></script>
+  <script src="js/vehicle.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
